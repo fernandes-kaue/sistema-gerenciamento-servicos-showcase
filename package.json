@@ -1,0 +1,13 @@
+{
+  "name": "sistema-gerenciamento-servicos-showcase",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Public sanitized showcase of a full stack service management system with Express, MongoDB, React and Vite.",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c blue,green \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "start": "concurrently -n backend,frontend -c blue,green \"npm --prefix backend run start\" \"npm --prefix frontend run dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

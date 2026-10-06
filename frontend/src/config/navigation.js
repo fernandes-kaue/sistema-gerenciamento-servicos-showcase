@@ -1,0 +1,56 @@
+import { orderedModules } from "../data/moduleConfigs";
+
+export const primaryNavigation = [
+  {
+    label: "Início",
+    path: "/",
+    description: "Visão geral do sistema e acesso aos módulos principais.",
+    icon: "home",
+  },
+  ...orderedModules.map((module) => ({
+    label: module.label,
+    path: module.basePath,
+    description: module.summary,
+    icon: module.key,
+  })),
+];
+
+export const supportNavigation = [];
+
+const routeMetadata = {
+  "/": {
+    eyebrow: "Tela inicial",
+    label: "Bem-vindo",
+    description: "Sistema com módulos de clientes e produtos prontos para operação.",
+  },
+  ...orderedModules.reduce((accumulator, module) => {
+    accumulator[module.basePath] = module.routeMeta.base;
+    accumulator[`${module.basePath}/listar`] = module.routeMeta.list;
+    accumulator[`${module.basePath}/novo`] = module.routeMeta.create;
+    accumulator[`${module.basePath}/editar`] = module.routeMeta.edit;
+    accumulator[`${module.basePath}/inativar`] = module.routeMeta.deactivate;
+    return accumulator;
+  }, {}),
+};
+
+const orderedPaths = Object.keys(routeMetadata).sort(
+  (left, right) => right.length - left.length
+);
+
+export function getRouteMeta(pathname) {
+  const exactMatch = routeMetadata[pathname];
+
+  if (exactMatch) {
+    return exactMatch;
+  }
+
+  const partialMatch = orderedPaths.find((path) => pathname.startsWith(path));
+
+  return (
+    routeMetadata[partialMatch] ?? {
+      eyebrow: "Navegação",
+      label: "Sistema de Gestão",
+      description: "Fluxo principal de operação do sistema.",
+    }
+  );
+}
